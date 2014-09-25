@@ -1,0 +1,13 @@
+{
+  "name": "infosci-website",
+  "version": "0.0.0",
+  "authors": [
+    "Jess Kane <jlk283@cornell.edu>"
+  ],
+  "description": "sample_app",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "angular": "~1.2.25"
+  }
+}

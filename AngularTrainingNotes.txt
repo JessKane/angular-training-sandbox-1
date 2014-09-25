@@ -1,0 +1,217 @@
+
+-----------------------------------------------------------
+|						  Day 1						  	  | 
+-----------------------------------------------------------
+
+topics:
+- single page application
+- ng-app location 
+- {{}} contains an angular expression, NOT javascript, will fail silently
+- should always use 'use strict'
+- ng-repeat contents is an angular expression
+- an angular expression has access to the $scope of it's controller
+- ng-repeat creates a scope for each iteration
+- | means filter
+- so, | filter:query references filter a filter called filter using query
+- should instantiate query object in controller
+
+
+- no $http in contoller, create service to abstract details
+- these guys tend to use restangular with features. restangular is $http.
+- avoid dependency injection in controllers - minification problems
+- ng annotate will fix this
+want -- phonecatApp.controller('PhoneListController', function($scope, $http) {
+	...
+});
+
+- ng-href as well as ng-src
+- angular-seed is really bad, perhaps yeoman, but it's all fluid based on a project.
+- use ui router, drop default angular routes, not powerful enough (/:phones == /phones/:phones)
+- data should live inside services and be accessed by controllers
+
+- filters are javascript, not angular expressions
+- ng-sanitize to export html from filter, but you should reconsider usually, directives instead
+
+- restangular or breeze, not $resource
+- getting backend api info from SERVICES
+
+
+-----------------------------------------------------------
+|						  Day 2						  	  | 
+-----------------------------------------------------------
+
+- the dot rule
+- the scope is not a model, it contains models. not $scope.firstName, but $scope.person.firstName
+- be careful of inheritance in js
+
+- don't use root scope
+
+- batarang, or preferably ng-inspector
+
+- processing list of items is called a digest cycle
+- dont use watch to manipulate dom, use directives
+- watch function called ALL THE TIME due to digest cycles
+
+- be careful of too much on the scope - performance issues
+- if your having problems, try hiding dom elements rather than removing them
+- 100s OK, 1000s SLOW
+- ng-grid, 100 rowsx20 columns is 4000 watches... instead use an html table, or hands-on-table, jquery data tables
+- want one watch per row, or one watch per entire table if it doesn't update
+
+- just build your own vs. using pre-configured tables
+- watchCollection(only 1 level deep), watchGroup
+- also bad with nested ng-repeat
+
+- use $log, not console.log, for real logging
+- $$ don't use, could go away, super internal, don't bother with it
+- $ still internal, but you can follow it
+
+
+- constants only used for simple scalar values
+- nice because they're injectable
+- value is a step up from constants, the lowest level of service
+- because at the time of config you don't have access to values, only constants
+- services and directives are where all of the logic lives. nowhere else. really.
+- factories allow for dependency injection into a factory. factories are really common, we'll use a lot of them.
+
+
+- define model: angular.module('demoApp', [])
+- reference model: angular.module('demoApp')
+- be careful!
+
+- we can concatenate js files in the index.html file for production, so don't worry about that. or, use templating to separate script tags from index.html. 
+
+- PREFIX EVERYTHING. seriously, it causes real, hard-to-find errors.
+- Can even be collisions between modules
+
+- the differences between services and factories is some javascript-like instatiation. but ALL services (constants, factories, services, etc.) are singletons! Services are singletons, Stack Overflow is really wrong. Teacher thinks the only reason for services is coffeescript-ers.
+
+- provider must have this.$get
+- used for config. populated in config phase, used to configure recipies.
+- providers would be used for lang support!
+- example: $router
+
+- Stack Overflow caution: many recent significant changes, make sure that your help is up to date, make sure timestamps/version accurate to what we're using
+- Even the Angular API defaults to probably wrong version?
+
+- angular code names are great
+
+- module for each feature, reusable components, application
+
+- UI-Bootstrap much better than Angular-UI
+
+-----------------------------------------------------------
+|						  Day 3						  	  | 
+-----------------------------------------------------------
+
+- promises sometimes called "then-ables", but that's a generalization
+- promises manage callbacks
+- promises generally manage uncertainty (e.g. "has the application loaded"), callbacks a just a small piece of the puzzle 
+- a fufilled promise - "when the promise resolves"
+- promises chain
+- chains can branch, be separated in the code
+
+- use catch handler at end of chain to collect all exception handling one place (also stops execution of other promises in the chain if an error occurs)
+- if there are two chains, both with a catch at the end, and an error occurs before the branching point, then BOTH catches will be executed
+- catch returns a promise! so be careful when returning promises, because a catch can be returned, causing thens to be hung off of the catch.
+- think before stopping a chain due to error - maybe a service likes errors, maybe doing nothing is ok. they ususally do nothing.
+
+- use: 
+p
+||
+t c
+|
+t
+|
+t
+
+because c would execute in an error state, but the ts wouldn't. don't:
+
+p
+|
+c
+|
+t
+|
+t
+|
+t
+
+because the c will be passed along as a promise and the ts will execute with bad data.
+
+- service decorators, http interceptors for success 200 with errors. or just hide away all the processing in a service.
+
+- finally clause always gets executed
+- timeout promises
+- $q subset of q library (with jquery)
+- $q has a method that takes a list of promises, and runs code when all of the promises complete. 
+
+- always use semicolons in js
+
+- use 4XX "Bad Request" and skip all metadata
+
+- promise: buzzer, deferred: control board. restaurant gives out buzzers. but if there's a button on the buzzer to get a table, everyone presses it right away. but there's no table ready!. so instead, the buttons are managed on a control board.
+- promises can't be un-resolved, un-rejected
+- p.then ( success fn, failure fn, notification fn)
+- deferred does lots of notifications
+
+- promises are cool. try asking js developer in interview, most won't be able to answer. it's an advanced technique.
+- divisible by 5 output "buzz", divisible by 3 output "bee", divisible by both output "buzzbee". so many people can't do it.
+
+- ng-app, ng-controller etc. are directives
+- directives enhance html, maybe not brand new html elements
+- input element is a directive. some directives are named the same as normal html elements in order to enhance html behavior. select is another one.
+
+- directives extract buisness logic, no directives means nasty templates, directives means human-readable shrunken templates
+- our trees, tables should be directives
+- the docs on this are a bunch of phds telling everything they know. don't be scared by this.
+
+- organize directives by element and functionality
+- Named: ngRepeat in js, ng-repeat in html, translation is automatic
+- Careful: abcXMLEditor becomes abc-x-m-l-editor
+- transcusion
+
+- @ string around finger, one-way
+- = highway, two ways
+- & anchor?
+
+-  directive "replace: true" is depricated, don't use
+
+- angular is written in angular
+
+
+- next topic: testing
+- directives are hard to unit test - quasi unit test/functional test. functionial testing is poking at stuff in the browser.
+- vojta/e jina on youtube about testing directives
+
+- no end-to-end tests in jenkins, it's slow!!!
+
+
+
+===========================================================
+|				     Changes Needed					  	  | 
+===========================================================
+
+- We should be using singleton services rather than the root scope for retrieving/holding cache data, like our locales data. The services should then be injected into controllers where necessary. Constants should only be used for scalar values, values should be used for objects, and factories are what we'd usually use. For instance, all of our API calls should be in factories. 
+
+- Angular-Seed isn't that great. Yeoman is better, but really we should be building the app from scratch for our own purposes.
+
+- We should talk about scope inheritance. I've got a good example for you guys. Also, we should talk about promises and directives.
+
+- On that note, ng-grid has some serious problems. It has several scopes per grid cell, and once you get too many scopes it drastically slows down the app. (Basically, every time a change occurs Angular runs through all of the scope objects. So every time something changes in an ng-grid, there are lots and lots of unnecessary additions/removals that happen). Suggestions from the teacher: #1 Make your own html table, #2 Use Handsontable or JQuery DataTables. A 100 x 40 ng-grid generates ~4000 watchers, we can get it down to one watcher per row or table.
+
+- If possible, RestAngular or Breeze is preferred to $resource or $http, since both of those aren't as feature rich. (They said they had never used $http or $resource in production.)
+
+- We should be using UIRouter rather than Angular's built-in router. Angular's router is pretty fragile. e.g. if you have /:anID and /something/:anID mappings and you use the url /something/1, :anID will be triggered rather than /something/:anID.
+
+- You guys should check out ng-annotate (a chrome plugin for Angular debugging)
+
+- We need to prefix all of our custom variables/names. There's serious namespace issues that we want to avoid. Like, "datepicker" is an actual name that's taken.
+
+- UI-Bootstrap much better than Angular-UI, in their experience
+
+- use 4XX "Bad Request" and skip all metadata
+
+
+
+
